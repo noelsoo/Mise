@@ -25,7 +25,7 @@ export function RecipeActions({ id, title, servings, shareSlug, siteUrl, books }
   return (
     <div className={hidden ? "hidden" : "no-print"}>
       <div className="flex flex-wrap gap-2">
-        <Button asChild variant="accent"><Link href={`/recipes/${id}/cook`}><ChefHat aria-hidden /> Cook mode</Link></Button>
+        <Button asChild variant="accent"><Link href={`/cook/${id}`}><ChefHat aria-hidden /> Cook mode</Link></Button>
         <Button variant="ghost" onClick={() => setOpen("plan")}><CalendarPlus aria-hidden /> Plan</Button>
         <Button variant="ghost" onClick={() => setOpen("book")}><BookPlus aria-hidden /> Cookbook</Button>
         <Button variant="ghost" onClick={() => setOpen("share")}><Share2 aria-hidden /> Share</Button>
