@@ -4,8 +4,6 @@ import { z } from "zod";
 import { requireUser } from "@/lib/supabase/server";
 import { extractRecipeFromHtml } from "@/lib/import/schema-org";
 import { fetchImage, fetchOembedJson, fetchRecipePage } from "@/lib/import/fetch-page";
-import { structureRecipe } from "@/lib/import/structure";
-import { fetchTranscript } from "@/lib/import/transcript";
 import { captionToDraft, parseInstagramHtml, parseTikTokOembed, socialSite, tiktokOembedUrl } from "@/lib/import/social";
 import { parseRecipeText } from "@/lib/import/text";
 import type { RecipeDraft } from "@/lib/import/types";
@@ -39,21 +37,7 @@ export async function importFromUrl(url: string): Promise<ImportResult> {
     try {
       const post = site === "tiktok" ? parseTikTokOembed(await fetchOembedJson(tiktokOembedUrl(parsed.data))) : parseInstagramHtml(await fetchRecipePage(parsed.data));
       if (!post) return { ok: false, error: `Couldn't read that ${label} caption. It may be private or need a login. Paste the caption text instead.` };
-      let { draft, warning } = captionToDraft(post, parsed.data);
-      if (warning) {
-        // The caption had no recipe in it: read what's said in the video instead.
-        const transcript = await fetchTranscript(parsed.data);
-        if (transcript) {
-          const fromSpeech = await structureRecipe({ caption: post.caption, transcript, sourceUrl: parsed.data, imageUrls: draft.imageUrls, tags: draft.tags });
-          if (fromSpeech) {
-            draft = fromSpeech;
-            warning = "Read from the video's audio, so check quantities and steps against the video before saving.";
-          } else {
-            draft.notes = `${draft.notes ?? ""}\n\nTranscript:\n${transcript}`.trim().slice(0, 4000);
-            warning = "Couldn't pull a clear recipe out of the audio. The transcript is in the notes; copy ingredients and steps from it.";
-          }
-        }
-      }
+      const { draft, warning } = captionToDraft(post, parsed.data);
       const photo = draft.imageUrls.length ? await saveFirstImage(draft.imageUrls, user.id, supabase) : null;
       return { ok: true, draft, photos: photo ? [photo] : [], warning };
     } catch {

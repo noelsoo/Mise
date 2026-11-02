@@ -3,7 +3,6 @@ import { Container } from "@/components/shell/page-header";
 import { ImportPanel } from "@/components/import/import-panel";
 import { requireUser } from "@/lib/supabase/server";
 
-export const maxDuration = 60;
 export const metadata: Metadata = { title: "Add recipe" };
 
 export default async function AddPage() {
