@@ -76,7 +76,8 @@ export async function matchIngredients(supabase: Client, names: string[]): Promi
     if (!q || q.length < 3) return;
     const { data } = await supabase.rpc("search_foods", { q, max_results: 1 });
     const top = data?.[0];
-    if (top && top.score > 0.45) chosen.set(name, { foodId: top.id, source: "search" });
+    // Strict on purpose: a wrong match is worse than an uncounted line the user can fix.
+    if (top && top.score > 0.55) chosen.set(name, { foodId: top.id, source: "search" });
   }));
 
   const foodIds = [...new Set([...chosen.values()].map((c) => c.foodId).filter((x): x is number => !!x))];
