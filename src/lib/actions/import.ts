@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { requireUser } from "@/lib/supabase/server";
 import { extractRecipeFromHtml } from "@/lib/import/schema-org";
-import { fetchImage, fetchOembedJson, fetchRecipePage } from "@/lib/import/fetch-page";
+import { fetchImage, fetchOembedJson, fetchRecipePage, resolveRedirects } from "@/lib/import/fetch-page";
 import { captionToDraft, parseInstagramHtml, parseTikTokOembed, socialSite, tiktokOembedUrl } from "@/lib/import/social";
 import { parseRecipeText } from "@/lib/import/text";
 import type { RecipeDraft } from "@/lib/import/types";
@@ -35,7 +35,7 @@ export async function importFromUrl(url: string): Promise<ImportResult> {
   if (site) {
     const label = site === "tiktok" ? "TikTok" : "Instagram";
     try {
-      const post = site === "tiktok" ? parseTikTokOembed(await fetchOembedJson(tiktokOembedUrl(parsed.data))) : parseInstagramHtml(await fetchRecipePage(parsed.data));
+      const post = site === "tiktok" ? parseTikTokOembed(await fetchOembedJson(tiktokOembedUrl(await resolveRedirects(parsed.data, (u) => socialSite(u.href) === "tiktok")))) : parseInstagramHtml(await fetchRecipePage(parsed.data));
       if (!post) return { ok: false, error: `Couldn't read that ${label} caption. It may be private or need a login. Paste the caption text instead.` };
       const { draft, warning } = captionToDraft(post, parsed.data);
       const photo = draft.imageUrls.length ? await saveFirstImage(draft.imageUrls, user.id, supabase) : null;
