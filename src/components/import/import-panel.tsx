@@ -94,7 +94,7 @@ export function ImportPanel({ userId }: { userId: string }) {
       {tab === "url" ? (
         <Card className="p-5">
           <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setError(null); start(async () => finish(await importFromUrl(url))); }}>
-            <Field label="Recipe link" htmlFor="url" hint="Works with most recipe sites (it reads the page's recipe data).">
+            <Field label="Recipe link" htmlFor="url" hint="Recipe sites, plus TikTok and Instagram videos (it reads the caption).">
               <Input id="url" type="url" inputMode="url" required placeholder="https://" value={url} onChange={(e) => setUrl(e.target.value)} />
             </Field>
             <Button type="submit" className="w-full" disabled={pending}>{pending ? <><Loader2 className="animate-spin" aria-hidden /> Reading the page…</> : "Import"}</Button>

@@ -147,3 +147,9 @@ export async function fetchRecipePage(url: string): Promise<string> {
 export async function fetchImage(url: string): Promise<{ bytes: Buffer; type: string }> {
   return safeFetch(url, { accept: 'image/avif,image/webp,image/jpeg,image/png', type: /^image\/(jpeg|png|webp|avif)\b/, maxBytes: 5 * 1024 * 1024 });
 }
+
+/** TikTok's public oEmbed endpoint. The caller passes a fixed https://www.tiktok.com/oembed URL. */
+export async function fetchOembedJson(url: string): Promise<unknown> {
+  const { bytes } = await safeFetch(url, { accept: 'application/json', type: /^application\/json\b/, maxBytes: 256 * 1024 });
+  return JSON.parse(new TextDecoder('utf-8').decode(bytes));
+}
