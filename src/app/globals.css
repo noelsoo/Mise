@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/* Botanical Culinary Editorial design system (from the Stitch design pack). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --canvas: #f6f4ef;
+  --surface: #ffffff;
+  --surface-muted: #f1f4ef;
+  --surface-high: #e6e9e4;
+  --border: #e5e2da;
+  --ink: #1b1f1c;
+  --ink-muted: #5e665f;
+  --primary: #3f6f4e;
+  --primary-hover: #345c41;
+  --primary-soft: #e3eee5;
+  --on-primary: #ffffff;
+  --accent: #c8562b;
+  --accent-ink: #a43c12;
+  --accent-soft: #fbe9e1;
+  --protein: #2f6fb2;
+  --carbs: #c9952b;
+  --carbs-ink: #8c6517;
+  --fat: #b5476b;
+  --danger: #ba1a1a;
+  --danger-soft: #ffdad6;
+  --shadow-1: 0 2px 8px -2px rgba(27, 31, 28, 0.04), 0 1px 3px -1px rgba(27, 31, 28, 0.06);
+  --shadow-2: 0 8px 24px -4px rgba(27, 31, 28, 0.08), 0 2px 6px -2px rgba(27, 31, 28, 0.04);
+  --shadow-3: 0 16px 36px -6px rgba(27, 31, 28, 0.12), 0 4px 12px -2px rgba(27, 31, 28, 0.06);
+}
+
+/* Dark mode uses the design system's low-light (cook mode) palette. */
+.dark,
+.cook-theme {
+  --canvas: #151816;
+  --surface: #1e2320;
+  --surface-muted: #232925;
+  --surface-high: #2b322d;
+  --border: rgba(236, 239, 236, 0.1);
+  --ink: #eceeec;
+  --ink-muted: #a3aca5;
+  --primary: #7fb08e;
+  --primary-hover: #93c2a1;
+  --primary-soft: rgba(127, 176, 142, 0.16);
+  --on-primary: #10140f;
+  --accent: #e2774d;
+  --accent-ink: #f0a07f;
+  --accent-soft: rgba(226, 119, 77, 0.16);
+  --protein: #7fb0e6;
+  --carbs: #e0b75c;
+  --carbs-ink: #e0b75c;
+  --fat: #e08aa6;
+  --danger: #ffb4ab;
+  --danger-soft: rgba(255, 180, 171, 0.14);
+  --shadow-1: 0 0 0 1px rgba(236, 239, 236, 0.06);
+  --shadow-2: 0 0 0 1px rgba(236, 239, 236, 0.08);
+  --shadow-3: 0 0 0 1px rgba(236, 239, 236, 0.1);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-high: var(--surface-high);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-protein: var(--protein);
+  --color-carbs: var(--carbs);
+  --color-carbs-ink: var(--carbs-ink);
+  --color-fat: var(--fat);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --shadow-1: var(--shadow-1);
+  --shadow-2: var(--shadow-2);
+  --shadow-3: var(--shadow-3);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--primary-soft);
+  }
+}
+
+@utility tnum {
+  font-feature-settings: "tnum" on;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility headline-xl {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  line-height: 38px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  @media (min-width: 1024px) {
+    font-size: 40px;
+    line-height: 48px;
+  }
+}
+
+@utility label-caps {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+}
