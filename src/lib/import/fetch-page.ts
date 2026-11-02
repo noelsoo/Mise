@@ -153,3 +153,23 @@ export async function fetchOembedJson(url: string): Promise<unknown> {
   const { bytes } = await safeFetch(url, { accept: 'application/json', type: /^application\/json\b/, maxBytes: 256 * 1024 });
   return JSON.parse(new TextDecoder('utf-8').decode(bytes));
 }
+
+/**
+ * Follow redirects without reading any body, e.g. TikTok short links (vm.tiktok.com/...) to the canonical
+ * video URL. Same SSRF checks as safeFetch, and every hop must satisfy `allow`.
+ */
+export async function resolveRedirects(url: string, allow: (u: URL) => boolean): Promise<string> {
+  let current = assertSafeUrl(url);
+  if (!allow(current)) throw new Error('Host is not allowed');
+  const signal = AbortSignal.timeout(10_000);
+  for (let hops = 0; hops <= MAX_REDIRECTS; hops++) {
+    await assertResolvesPublic(current);
+    const res = await fetch(current, { redirect: 'manual', signal, headers: { 'User-Agent': USER_AGENT } });
+    await res.body?.cancel();
+    const loc = res.headers.get('location');
+    if (res.status < 300 || res.status >= 400 || !loc) return current.href;
+    current = assertSafeUrl(new URL(loc, current).href);
+    if (!allow(current)) throw new Error('Host is not allowed');
+  }
+  throw new Error('Too many redirects');
+}

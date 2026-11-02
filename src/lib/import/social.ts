@@ -54,12 +54,10 @@ export function parseTikTokOembed(json: unknown): SocialPost | null {
   if (!json || typeof json !== 'object') return null;
   const o = json as Record<string, unknown>;
   const caption = typeof o.title === 'string' ? o.title.trim() : '';
-  if (!caption) return null;
-  return {
-    caption,
-    image: typeof o.thumbnail_url === 'string' ? o.thumbnail_url : null,
-    author: typeof o.author_name === 'string' ? o.author_name : null,
-  };
+  const image = typeof o.thumbnail_url === 'string' ? o.thumbnail_url : null;
+  // A video with no caption still has a thumbnail and author; an error response has neither.
+  if (!caption && !image) return null;
+  return { caption, image, author: typeof o.author_name === 'string' ? o.author_name : null };
 }
 
 /** Instagram puts the caption in og:title (`Name on Instagram: "caption"`) and og:description (`12 likes, 3 comments - name on date: "caption"`). */
