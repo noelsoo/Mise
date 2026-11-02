@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
@@ -241,7 +242,7 @@ export default async function LandingPage() {
       <footer className="border-t border-border px-4 py-12 md:px-8">
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[2fr_1fr_1fr]">
           <div>
-            <p className="flex items-center gap-2 font-serif text-2xl"><span className="grid size-9 place-items-center rounded-lg bg-primary text-on-primary"><Sprout className="size-5" aria-hidden /></span> Mise</p>
+            <p className="flex items-center gap-2 font-serif text-2xl"><Image src="/icons/icon-192.png" alt="" width={36} height={36} className="size-9 rounded-[9px]" /> Mise</p>
             <p className="mt-3 max-w-sm text-sm text-ink-muted">A calm recipe ledger for everyday cooking, macros you can trust and one list for the market.</p>
             <p className="mt-3 text-xs text-ink-muted">Nutrition data: USDA FoodData Central, SR Legacy (public domain).</p>
           </div>

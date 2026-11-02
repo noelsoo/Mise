@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, Menu, Sprout, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
+import Image from "next/image";
 
 const LINKS = [
   { href: "#features", label: "Features" },
@@ -16,7 +17,7 @@ export function LandingNav({ appHref, signedIn }: { appHref: string; signedIn: b
     <header className="sticky top-0 z-40 border-b border-border bg-canvas/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 md:px-8">
         <Link href="/" className="flex items-center gap-2.5" aria-label="Mise home">
-          <span className="grid size-9 place-items-center rounded-lg bg-primary text-on-primary"><Sprout className="size-5" aria-hidden /></span>
+          <Image src="/icons/icon-192.png" alt="" width={36} height={36} className="size-9 rounded-[9px]" priority />
           <span className="leading-tight"><span className="block font-serif text-xl">Mise</span><span className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted sm:block">Culinary ledger</span></span>
         </Link>
         <nav aria-label="Sections" className="ml-6 hidden items-center gap-6 text-sm font-medium lg:flex">
